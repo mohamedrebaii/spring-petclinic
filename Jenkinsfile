@@ -31,6 +31,12 @@ pipeline {
                 sh 'mvn test'
             }
         }
+
+        stage('Verify Docker') {
+            steps {
+                   sh 'docker --version'
+            }
+        }
         
         
         stage('Docker Build') {
