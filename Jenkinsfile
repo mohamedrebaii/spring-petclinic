@@ -32,30 +32,7 @@ pipeline {
             }
         }
 
-        stage('Verify Docker') {
-            steps {
-                   sh 'docker --version'
-            }
-        }
         
-        
-        stage('Docker Build') {
-            steps {
-                script {
-                    sh 'docker build -t $DOCKER_IMAGE .'
-                }
-            }
-        }
-        
-        stage('Push to DockerHub') {
-            steps {
-                withDockerRegistry([credentialsId: 'dockerhub-credentials', url: 'https://index.docker.io/v1/']) {
-                    sh 'docker tag $DOCKER_IMAGE $DOCKER_REGISTRY/$DOCKER_IMAGE'
-                    sh 'docker push $DOCKER_REGISTRY/$DOCKER_IMAGE'
-                }
-            }
-        }
-    }
     
     post {
         success {
@@ -66,3 +43,4 @@ pipeline {
         }
     }
 }
+
