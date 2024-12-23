@@ -9,7 +9,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/mohamedrebaii/spring-petclinic'
+                // Checkout the repository, specifying the 'main' branch
+                checkout scm: [
+                    $class: 'GitSCM', 
+                    branches: [[name: '*/main']], // Make sure 'main' is specified
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [],
+                    userRemoteConfigs: [[url: 'https://github.com/mohamedrebaii/spring-petclinic']]
+                ]
             }
         }
         
@@ -42,9 +49,6 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 withDockerRegistry([credentialsId: 'dockerhub-credentials', url: 'https://index.docker.io/v1/']) {
-    
-
- 
                     sh 'docker tag $DOCKER_IMAGE $DOCKER_REGISTRY/$DOCKER_IMAGE'
                     sh 'docker push $DOCKER_REGISTRY/$DOCKER_IMAGE'
                 }
