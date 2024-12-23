@@ -35,7 +35,8 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    sh 'docker build -t $DOCKER_IMAGE .'
+                    // Build Docker image with dynamic versioning
+                    sh "docker build -t ${DOCKER_IMAGE} ."
                 }
             }
         }
@@ -43,14 +44,13 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 withDockerRegistry([credentialsId: 'dockerhub-credentials', url: 'https://index.docker.io/v1/']) {
-                    sh 'docker tag $DOCKER_IMAGE $DOCKER_REGISTRY/$DOCKER_IMAGE'
-                    sh 'docker push $DOCKER_REGISTRY/$DOCKER_IMAGE'
+                    sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY}/${DOCKER_IMAGE}"
+                    sh "docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}"
                 }
             }
         }
+    }
 
-        
-    
     post {
         success {
             echo "Pipeline completed successfully!"
@@ -60,4 +60,3 @@ pipeline {
         }
     }
 }
-
