@@ -32,11 +32,6 @@ pipeline {
             }
         }
         
-        stage('Code Coverage') {
-            steps {
-                sh 'mvn cobertura:cobertura'
-            }
-        }
         
         stage('Docker Build') {
             steps {
